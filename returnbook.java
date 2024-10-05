@@ -1,0 +1,659 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package LibrarySys;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.ResultSetMetaData;
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+/**
+ *
+ * @author IamOP
+ */
+public class returnbook extends javax.swing.JFrame {
+
+    /**
+     * Creates new form Category
+     */
+    public returnbook() {
+        initComponents();
+        Connect();
+        book();
+        Returnbook_Load();
+        Returnbook_Load1();
+        
+      
+        
+        
+    }
+    
+    
+    
+    Connection con;
+    PreparedStatement pst;
+    ResultSet rs;
+    
+    public void Connect(){
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+             con = DriverManager.getConnection("jdbc:mysql://localhost/librarysys","root","");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
+    public class BookItem
+    {
+        int id;
+        String name;
+        
+        public BookItem(int id, String name)
+        {
+            this.id = id;
+            this.name = name;
+        }
+        
+        public String toString()
+        {
+            return name;
+        }
+    }
+    
+    public void book()
+    {
+        try {
+            pst = (PreparedStatement) con.prepareStatement("select * from book");
+             rs = pst.executeQuery();
+             txtbook.removeAllItems();
+             
+             while(rs.next())
+             {
+                 txtbook.addItem(new BookItem (rs.getInt(1), rs.getString(2)));
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Book.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
+    
+    
+   
+    
+    
+    public void Returnbook_Load() //load the book in to the table from SQL
+    {
+        int c;
+        
+        try {
+            pst = (PreparedStatement) con.prepareStatement("select r.id,m.name,b.bname,r.status,r.returndate from returnbook r JOIN member m ON r.memberid = m.id JOIN book b ON r.bookid = b.id ");
+            rs = pst.executeQuery();
+            
+            ResultSetMetaData rsd = (ResultSetMetaData) rs.getMetaData();
+            c = rsd.getColumnCount();
+            
+            DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
+            d.setRowCount(0);
+            
+            while(rs.next())
+            {
+             Vector v2 = new Vector();
+             
+             for(int i=1; i <= c; i++)
+             {
+                 v2.add(rs.getString("r.id"));
+                 v2.add(rs.getString("m.name"));
+                 v2.add(rs.getString("b.bname"));
+                 v2.add(rs.getString("r.status"));
+                 v2.add(rs.getString("r.returndate"));
+               
+             }
+             
+             d.addRow(v2);
+                
+            }
+            
+            
+                    
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void Returnbook_Load1()
+    {
+        int c;
+        
+        try {
+            pst = (PreparedStatement) con.prepareStatement("select * from returnbook");
+            rs = pst.executeQuery();
+            
+            ResultSetMetaData rsd = (ResultSetMetaData) rs.getMetaData();
+            c = rsd.getColumnCount();
+            
+            DefaultTableModel d = (DefaultTableModel)jTable1.getModel();
+            d.setRowCount(0);
+            
+            while(rs.next())
+            {
+             Vector v2 = new Vector();
+             
+             for(int i=1; i <= c; i++)
+             {
+                 v2.add(rs.getString("id"));
+                 v2.add(rs.getString("membername"));
+                 v2.add(rs.getString("bookname"));
+                 v2.add(rs.getString("status"));
+                 v2.add(rs.getString("returndate"));
+             }
+             
+             d.addRow(v2);
+                
+            }
+                    
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtid = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtbook = new javax.swing.JComboBox();
+        jLabel6 = new javax.swing.JLabel();
+        txtmember = new javax.swing.JTextField();
+        txtrdate = new com.toedter.calendar.JDateChooser();
+        txtstatus = new javax.swing.JComboBox<>();
+        jLabel7 = new javax.swing.JLabel();
+        txtreturnid = new javax.swing.JTextField();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+
+        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel1.setText("Return Book");
+
+        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel2.setText("Status");
+
+        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel3.setText("Member Name");
+
+        txtid.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtidKeyPressed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Return ID", "Member Name", "Book", "Status", "RetrunDate"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Update");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Delete");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Cancel");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel4.setText("Member ID");
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel5.setText("Book");
+
+        txtbook.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " " }));
+
+        jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel6.setText("Return Date");
+
+        txtstatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Return", "Not Return", " " }));
+        txtstatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtstatusActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 102));
+        jLabel7.setText("ID");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(63, 63, 63)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(140, 140, 140)
+                                .addComponent(txtmember, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(140, 140, 140)
+                                .addComponent(txtrdate, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtbook, 0, 234, Short.MAX_VALUE)
+                                    .addComponent(txtid, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
+                                    .addComponent(txtstatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtreturnid))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(80, 80, 80)
+                        .addComponent(jLabel1)))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(jLabel1)
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtreturnid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtmember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtbook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtstatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(19, 19, 19)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(txtrdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 57, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel d1 = (DefaultTableModel)jTable1.getModel();
+        int selectIndex = jTable1.getSelectedRow();
+        int id = Integer.parseInt(d1.getValueAt(selectIndex, 0).toString());
+
+        String mid = txtid.getText();
+        String membername = txtmember.getText();
+        BookItem bitem = (BookItem) txtbook.getSelectedItem();
+        String book = txtbook.getSelectedItem().toString();
+        String status = txtstatus.getSelectedItem().toString();
+        SimpleDateFormat date_format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String returndate = date_format1.format(txtrdate.getDate());
+
+        try {
+            pst = (PreparedStatement) con.prepareStatement("delete from returnbook where id = ?");
+            pst.setInt(1, id );
+            int k = pst.executeUpdate();
+
+            if(k == 1)
+            {
+                JOptionPane.showMessageDialog(this, "Record Deleted");
+
+                txtid.setText("");
+                txtmember.setText("");
+                txtbook.setSelectedIndex(-1);
+                txtstatus.setSelectedIndex(-1);
+                txtrdate.setDateFormatString("");
+                txtid.requestFocus();
+                Returnbook_Load1();
+                jButton1.setEnabled(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Error!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        DefaultTableModel d1 = (DefaultTableModel)jTable1.getModel();
+        int selectIndex = jTable1.getSelectedRow();
+
+        int id = Integer.parseInt(d1.getValueAt(selectIndex, 0).toString());
+        String mid = txtid.getText();
+        String membername = txtmember.getText();
+        String book = txtbook.getSelectedItem().toString();
+        String status = txtstatus.getSelectedItem().toString();
+        
+        SimpleDateFormat date_format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String returndate = date_format1.format(txtrdate.getDate());
+        try {
+            pst = (PreparedStatement) con.prepareStatement("update returnbook set memberid = ?, bookname = ?, status = ?, returndate = ? where id = ?");
+            pst.setString(1,mid);
+            pst.setString(2, book);
+            pst.setString(3, status);
+            pst.setString(4, returndate);
+            pst.setInt(5, id );
+            int k = pst.executeUpdate();
+
+            if(k == 1)
+            {
+                JOptionPane.showMessageDialog(this, "Returnbook Updated");
+
+                txtid.setText("");
+                txtmember.setText("");
+                txtbook.setSelectedIndex(-1);
+                txtid.requestFocus();
+                Returnbook_Load1();
+                jButton1.setEnabled(true);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Error!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        String id = txtreturnid.getText();
+        String mid = txtid.getText();
+        String membername = txtmember.getText();
+        BookItem bitem = (BookItem) txtbook.getSelectedItem();
+        String status = txtstatus.getSelectedItem().toString();
+        String book = txtbook.getSelectedItem().toString();
+        
+        
+        SimpleDateFormat date_format1 = new SimpleDateFormat("yyyy-MM-dd");
+        String returndate = date_format1.format(txtrdate.getDate());
+        
+        try {
+            pst = (PreparedStatement) con.prepareStatement("insert into returnbook (id,memberid,membername,bookid,bookname,status,returndate)values(?,?,?,?,?,?,?)");
+            pst.setString(1, id);
+            pst.setString(2,mid);
+            pst.setString(3, membername);
+            pst.setInt(4, bitem.id);
+            pst.setString(5, book);
+            pst.setString(6, status);
+            pst.setString(7, returndate);
+            int k = pst.executeUpdate();
+
+            if(k == 1)
+            {
+                JOptionPane.showMessageDialog(this, "Book Returned!");
+
+                txtid.setText("");
+                txtbook.setSelectedIndex(-1);
+                txtmember.setText("");
+                Returnbook_Load();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "Error!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel d1 = (DefaultTableModel)jTable1.getModel();
+        int selectIndex = jTable1.getSelectedRow();
+
+        int id = Integer.parseInt(d1.getValueAt(selectIndex, 0).toString());
+        txtmember.setText(d1.getValueAt(selectIndex, 1).toString());
+        txtbook.setSelectedItem(d1.getValueAt(selectIndex, 2).toString());
+        
+        
+
+        jButton1.setEnabled(false);
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txtidKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            String mid = txtid.getText();
+            
+            try {
+                pst = (PreparedStatement) con.prepareStatement("select * from member where id = ?");
+                pst.setString(1, mid);
+                rs = pst.executeQuery();
+                
+                if (rs.next() == false)
+                {
+                    JOptionPane.showMessageDialog(this, "Member ID not found!");
+                }
+                else
+                {
+                    String membername = rs.getString("name");
+                    txtmember.setText(membername.trim());
+                }
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(returnbook.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_txtidKeyPressed
+
+    private void txtstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtstatusActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtstatusActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(returnbook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(returnbook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(returnbook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(returnbook.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new returnbook().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JComboBox txtbook;
+    private javax.swing.JTextField txtid;
+    private javax.swing.JTextField txtmember;
+    private com.toedter.calendar.JDateChooser txtrdate;
+    private javax.swing.JTextField txtreturnid;
+    private javax.swing.JComboBox<String> txtstatus;
+    // End of variables declaration//GEN-END:variables
+}
